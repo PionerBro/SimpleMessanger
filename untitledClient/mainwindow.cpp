@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&recipient_, SIGNAL(signal_send_message_answer(uint64_t, std::string, std::string)), this, SLOT(send_message_answer(uint64_t, std::string, std::string)));
     connect(&recipient_, SIGNAL(signal_change_profile_info_answer(bool)), this, SLOT(change_profile_info_answer(bool)));
     connect(&recipient_, SIGNAL(signal_lost_connection()), this, SLOT(lost_connection()));
-    connect(&recipient_, SIGNAL(signal_load_image(std::string, uint64_t, uint64_t,uint64_t)), this, SLOT(load_image(std::string,uint64_t, uint64_t, uint64_t)));
+    //connect(&recipient_, SIGNAL(signal_load_image(std::string, uint64_t, uint64_t,uint64_t)), this, SLOT(load_image(std::string,uint64_t, uint64_t, uint64_t)));
 
     connect(settings_widget_.get(), SIGNAL(signal_accept_profile_changings(UserInfo)), this, SLOT(accept_profile_changings(UserInfo)));
     connect(profile_.get(), SIGNAL(signal_on_friends_btn_clicked()), this, SLOT(on_friends_button_clicked()));
@@ -267,53 +267,9 @@ void MainWindow::onAdd_friend_btn_clicked(uint64_t id)
     recipient_.add_friend_request(id);
 }
 
-void MainWindow::load_image(std::string sr, uint64_t w, uint64_t h, uint64_t format)
-{
-    qDebug()<<"finish";
-    s=sr;
-    qDebug()<<s.size()<<w<<h<<format;
-    uchar *data = new uchar[s.size()];
-    memcpy(data, s.data(), s.size());
-    QImage image(data, w, h, QImage::Format(format));
-    ui->loadImage->setIcon(QPixmap::fromImage(image));
-    profile_->setAvatar(QPixmap::fromImage(image));
-}
-
 void MainWindow::accept_profile_changings(UserInfo info)
 {
     recipient_.change_profile_info_request(info);
-}
-
-void MainWindow::on_createImage_clicked()
-{
-    QImage image("picture.jpg");
-    uint64_t size = image.sizeInBytes();
-    uint64_t width = image.size().width();
-    uint64_t height = image.size().height();
-    uint64_t format = image.format();
-    recipient_.create_image_request(size, image.constBits(), width, height, format);
-}
-
-void MainWindow::on_loadImage_clicked()
-{
-    recipient_.load_image_request();
-}
-
-void MainWindow::on_pressMe_clicked()
-{
-    QImage image("picture.jpg");
-    ptr = new uchar[image.sizeInBytes()];
-    uint64_t size = image.sizeInBytes();
-    memcpy(ptr, image.constBits(), size);
-    uint64_t width = image.size().width();
-    uint64_t height = image.size().height();
-    uint64_t perLine = image.bytesPerLine();
-    qDebug()<<size<<" "<<height*perLine;
-    uint64_t format = image.format();
-    qDebug()<<format;
-    s = std::string((char*)image.constBits(), size);
-    QImage img((uchar*)s.data(), width, height, QImage::Format(format));
-    ui->pressMe->setIcon(QPixmap::fromImage(img));
 }
 
 

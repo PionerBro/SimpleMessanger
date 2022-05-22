@@ -27,6 +27,9 @@ void ProfileWidget::update_image()
                      (QImage::Format)user_info_.image().format());
         ui->avatar_lbl->setPixmap(QPixmap::fromImage(image).scaled(ui->avatar_lbl->size(),
                                                                    Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    }else{
+        ui->avatar_lbl->clear();
+        ui->avatar_lbl->setText("No foto");
     }
 }
 

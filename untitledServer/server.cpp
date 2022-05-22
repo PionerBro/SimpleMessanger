@@ -1,17 +1,26 @@
 #include "server.h"
 #include <fstream>
 #include <charconv>
+#include <filesystem>
 
 Server::Server(std::function<void(uint64_t)> accept_handler, std::function<void(uint64_t, const char*, uint64_t)> read_handler)
     :acceptor_(context_), accept_handler_(accept_handler), read_handler_(read_handler)
 {
-    std::ifstream in("host.conf");
     int port = 0;
-    if(in.is_open()){
-        std::string str;
-        std::getline(in, str);
-        in.close();
-        std::from_chars(str.data(), str.data()+str.size(), port);
+    if(!std::filesystem::exists("host.conf")){
+        port = 8001;
+        std::ofstream out("host.conf");
+        std::string str("8001");
+        out.write(str.c_str(), str.size());
+        out.close();
+    }else{
+        std::ifstream in("host.conf");
+        if(in.is_open()){
+            std::string str;
+            std::getline(in, str);
+            in.close();
+            std::from_chars(str.data(), str.data()+str.size(), port);
+        }
     }
     tcp::endpoint ep(tcp::endpoint(tcp::v4(), port));
     acceptor_.open(ep.protocol());

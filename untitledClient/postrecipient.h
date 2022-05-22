@@ -25,9 +25,7 @@ class PostRecipient : public QObject
         MSG_CODE_ADD_FRIEND,
         MSG_CODE_CREATE_ROOM,
         MSG_CODE_OPEN_ROOM,
-        MSG_CODE_CREATE_IMAGE,
         MSG_CODE_CHANGE_INFO,
-        MSG_CODE_LOAD_IMAGE,
         MSG_CODE_QUIT = 127
     };
 
@@ -68,8 +66,6 @@ private:
     void open_room_answer(const MessageStream& stream);
     void send_message_answer(const MessageStream& stream);
     void change_profile_info_answer(const MessageStream& stream);
-    void create_image(const MessageStream& stream);
-    void load_image(const MessageStream& stream);
 signals:
     void signal_write_msg(std::string msg);
     void signal_login_answer(bool result);
@@ -84,7 +80,6 @@ signals:
     void signal_send_message_answer(uint64_t room_id, std::string user_name, std::string message);
     void signal_change_profile_info_answer(bool result);
     void signal_lost_connection();
-    void signal_load_image(std::string, uint64_t, uint64_t, uint64_t);
 private:
      Client client_;
      UserInfo user_;

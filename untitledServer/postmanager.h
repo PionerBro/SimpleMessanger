@@ -26,9 +26,7 @@ class PostManager : public QObject
         MSG_CODE_ADD_FRIEND,
         MSG_CODE_CREATE_ROOM,
         MSG_CODE_OPEN_ROOM,
-        MSG_CODE_CREATE_IMAGE,
         MSG_CODE_CHANGE_INFO,
-        MSG_CODE_LOAD_IMAGE,
         MSG_CODE_QUIT = 127
     };
 public:
@@ -49,8 +47,6 @@ private:
     void receive_message(uint64_t id, const MessageStream& stream);
     void quit_user(uint64_t connected_id);
     void change_user_info(uint64_t id, const MessageStream& stream);
-    void create_image(uint64_t id, const MessageStream& stream);
-    void load_image(uint64_t);
 
     bool load_start_data();
     bool load_accounts_data();

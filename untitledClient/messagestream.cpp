@@ -82,6 +82,7 @@ MessageStream& MessageStream::operator<<(const ImageInfo& info){
 }
 
 MessageStream& MessageStream::operator>>(ImageInfo& info){
+    info.clear();
     std::string data;
     uint64_t width = 0;
     uint64_t height = 0;
@@ -95,6 +96,7 @@ MessageStream& MessageStream::operator>>(ImageInfo& info){
 }
 
 const MessageStream& MessageStream::operator>>(ImageInfo& info) const{
+    info.clear();
     std::string data;
     uint64_t width = 0;
     uint64_t height = 0;

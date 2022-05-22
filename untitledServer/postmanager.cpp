@@ -75,14 +75,8 @@ void PostManager::read_msg_from_client(uint64_t id, const char *ptr, uint64_t si
     case MSG_CODE_OPEN_ROOM:
         open_room(id, stream);
         break;
-    case MSG_CODE_CREATE_IMAGE:
-        create_image(id, stream);
-        break;
     case MSG_CODE_CHANGE_INFO:
         change_user_info(id, stream);
-        break;
-    case MSG_CODE_LOAD_IMAGE:
-        load_image(id);
         break;
     case MSG_CODE_QUIT:
         quit_user(id);
@@ -334,22 +328,6 @@ void PostManager::change_user_info(uint64_t id, const MessageStream &stream)
     write(id, answer.row_data());
 }
 
-void PostManager::create_image(uint64_t id, const MessageStream &stream)
-{
-    stream>>s>>width>>height>>format;
-    MessageStream answer;
-    answer<<uint64_t(MSG_CODE_CREATE_IMAGE)<<uint64_t(0);
-    write(id, answer.row_data());
-}
-
-void PostManager::load_image(uint64_t id)
-{
-    MessageStream stream;
-    qDebug()<<s.size()<<width<<height<<format;
-    stream<<uint8_t(MSG_CODE_LOAD_IMAGE)<<s<<width<<height<<format;
-    write(id, stream.row_data());
-}
-
 bool PostManager::load_start_data()
 {
     if(load_accounts_data() && load_rooms_data())
@@ -359,7 +337,16 @@ bool PostManager::load_start_data()
 
 bool PostManager::load_accounts_data()
 {
-    std::ifstream in("users.info", std::ios::binary);
+    std::string filename = "users.info";
+    if(!std::filesystem::exists(filename)){
+        std::ofstream out(filename);
+        if(out.is_open()){
+            out.close();
+            return true;
+        }
+        return false;
+    }
+    std::ifstream in(filename, std::ios::binary);
     if(in.is_open()){
         std::stringstream s_stream;
         s_stream<<in.rdbuf();
@@ -379,7 +366,16 @@ bool PostManager::load_accounts_data()
 
 bool PostManager::load_rooms_data()
 {
-    std::ifstream in("rooms.info", std::ios::binary);
+    std::string filename = "rooms.info";
+    if(!std::filesystem::exists(filename)){
+        std::ofstream out(filename);
+        if(out.is_open()){
+            out.close();
+            return true;
+        }
+        return false;
+    }
+    std::ifstream in(filename, std::ios::binary);
     if(in.is_open()){
         std::stringstream s_stream;
         s_stream<<in.rdbuf();

@@ -1,6 +1,7 @@
 #include "client.h"
 #include <fstream>
 #include <string>
+#include <filesystem>
 
 Client::Client(std::function<void()> connect_handler, std::function<void(const char*, uint64_t)> read_handler):
     socket_(context_), connect_handler_(connect_handler), read_handler_(read_handler)
@@ -30,11 +31,22 @@ void Client::do_connect()
 {
     std::string address;
     std::string port;
-    std::ifstream in("host.conf");
-    if(in.is_open()){
-        std::getline(in, address);
-        std::getline(in, port);
-        in.close();
+    if(!std::filesystem::exists("host.conf")){
+        address = "127.0.0.1";
+        port = "8001";
+        std::ofstream out("host.conf");
+        if(out.is_open()){
+            std::string str("127.0.0.1\n8001\n");
+            out.write(str.c_str(), str.size());
+            out.close();
+        }
+    }else{
+        std::ifstream in("host.conf");
+        if(in.is_open()){
+            std::getline(in, address);
+            std::getline(in, port);
+            in.close();
+        }
     }
     tcp::resolver resolver(context_);
     auto endpoints = resolver.resolve({address,port});

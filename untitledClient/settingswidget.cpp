@@ -20,6 +20,9 @@ void SettingsWidget::update(){
                      (QImage::Format)info_.image().format());
         ui->foto_lbl->setPixmap(QPixmap::fromImage(image).scaled(ui->foto_lbl->size(),
                                                                    Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    }else{
+        ui->foto_lbl->clear();
+        ui->foto_lbl->setText("No foto");
     }
 }
 

@@ -113,22 +113,6 @@ void PostRecipient::change_profile_info_request(const UserInfo &info)
     client_.write(out.data(), out.size());
 }
 
-void PostRecipient::create_image_request(uint64_t size, const uchar *data, uint64_t width, uint64_t height, uint64_t format)
-{
-    MessageStream out;
-    std::string s((char*)data, size);
-    qDebug()<<s.size()<<width<<height<<format;
-    out<<static_cast<uint8_t>(MSG_CODE_CREATE_IMAGE)<<s<<width<<height<<format;
-    client_.write(out.data(), out.size());
-}
-
-void PostRecipient::load_image_request()
-{
-    MessageStream out;
-    out<<static_cast<uint8_t>(MSG_CODE_LOAD_IMAGE);
-    client_.write(out.data(), out.size());
-}
-
 void PostRecipient::decode(const char *ptr, uint64_t size)
 {
     MessageStream stream(ptr, size);
@@ -170,14 +154,8 @@ void PostRecipient::decode(const char *ptr, uint64_t size)
     case MSG_CODE_OPEN_ROOM:
         open_room_answer(stream);
         break;
-    case MSG_CODE_CREATE_IMAGE:
-        create_image(stream);
-        break;
     case MSG_CODE_CHANGE_INFO:
         change_profile_info_answer(stream);
-        break;
-    case MSG_CODE_LOAD_IMAGE:
-        load_image(stream);
         break;
     case MSG_CODE_QUIT:
         emit signal_lost_connection();
@@ -358,20 +336,4 @@ void PostRecipient::change_profile_info_answer(const MessageStream &stream)
     user_.set_surname(info.surname());
     emit signal_change_profile_info_answer(true);
     emit signal_write_msg("send message Ok");
-}
-
-void PostRecipient::create_image(const MessageStream &stream)
-{
-    qDebug()<<"create completed";
-}
-
-void PostRecipient::load_image(const MessageStream &stream)
-{
-    std::string s;
-    uint64_t width = 0;
-    uint64_t height = 0;
-    uint64_t format = 0;
-    stream>>s>>width>>height>>format;
-    qDebug()<<s.size()<<width<<height<<format;
-    emit signal_load_image(s,width,height,format);
 }

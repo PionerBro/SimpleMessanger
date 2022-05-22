@@ -113,27 +113,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="createImage">
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="loadImage">
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pressMe">
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>

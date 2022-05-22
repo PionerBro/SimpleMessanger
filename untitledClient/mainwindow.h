@@ -61,12 +61,7 @@ private slots:
     void onUsers_btn_clicked();
     void onDelete_friend_btn_clicked(uint64_t id);
     void onAdd_friend_btn_clicked(uint64_t);
-    void load_image(std::string, uint64_t, uint64_t,uint64_t);
     void accept_profile_changings(UserInfo info);
-
-    void on_createImage_clicked();
-    void on_loadImage_clicked();
-    void on_pressMe_clicked();
 signals:
 
 private:
@@ -80,8 +75,6 @@ private:
     std::unique_ptr<ProfileWidget> profile_ = nullptr;
     std::unique_ptr<RegistrationDialog> reg_dialog_ = nullptr;
     std::unique_ptr<LoginDialog> login_dialog_ = nullptr;
-    uchar* ptr = nullptr;
-    std::string s;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
